@@ -1,0 +1,158 @@
+/* Page Colors */
+:root {
+--dayBkgd0: #bcffec;
+--dayBkgd1: #80ffdb;
+--dayBkgd2: #5390d9;
+--cardText: black;
+--footerBkgd1: #5e60ce;
+--footerBkgd2: #7400b8;
+--footerText: #5390d9;
+--footerHover: #80ffdb;
+--searchBkgd: #7400b8;
+--searchText: white;
+--tempHigh: orange;
+--tempLow: green;
+--tempModerate: yellow;
+--tempSevere: violet;
+--tempVeryHigh: red;
+}
+
+/* Page Properties */
+body {
+  background: url("https://cutewallpaper.org/25/animated-cloud-wallpaper/artstation-2d-animated-cloud-fahim-raphael.gif");
+  font-size: 150%;
+}
+
+/* Card Shadows */
+.forecast-card,
+#main-card,
+.search-card {
+  box-shadow: 5px 5px 15px #510080;
+}
+
+/* Search Area */
+#search-card {
+  background-color: var(--searchBkgd);
+  border-radius: 5%;
+  height: 103%;
+  top: 10%;
+  left: 2%;
+}
+#search-card h2 {
+  color: var(--searchText);
+}
+.searched-cities-btn {
+  font-size: 110%;
+}
+
+/* Weather Cards */
+.forecast-card {
+  background: linear-gradient(160deg, var(--dayBkgd1), var(--dayBkgd2));
+  border-radius: 10%;
+}
+.forecast-card:hover {
+  background: linear-gradient(160deg, var(--dayBkgd0), var(--dayBkgd1));
+  transform: scale(1.05);
+}
+.forecast-card img {
+  margin: 0 auto;
+} 
+.forecast-date {
+  text-align: center;
+  font-size: 150%;
+} 
+.forecast-humidity,
+.forecast-temp,
+.forecast-wind {
+  margin-left: 15px;
+  text-align: center;
+  font-size: 125%;
+}
+#main-card {
+  background: linear-gradient(160deg, var(--dayBkgd1), var(--dayBkgd2));
+  border-radius: 5%;
+  font-size: 125%;
+  top: 5%;
+  transition: transform 0.2s;
+}
+#main-card:hover {
+  background: linear-gradient(160deg, var(--dayBkgd0), var(--dayBkgd1));
+  transform: scale(1.02);
+}
+#main-card-city {
+  font-size: 125%;
+  font-weight: bold;
+}
+#main-card-icon {
+  width: 60%;
+} 
+.main-text {
+  font-size: 120%;
+}
+#weatherarea {
+  position: absolute;
+  top: 5%;
+  left: 25%;
+}
+
+/* Weather Card text color */
+#main-card h2,
+#main-card p,
+#main-card span,
+.forecast-card h4,
+.forecast-card p {
+  color: var(--cardText);
+}
+
+/* UV Index */ 
+.high,
+.low,
+.moderate,
+.severe,
+.very-high {
+  font-weight: bold;
+  text-align: center;
+  width: 100px;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+/* UV Index Colors */
+.high {
+  background-color: var(--tempHigh);
+} 
+.low {
+  background-color: var(--tempLow);
+}
+.moderate {
+  background-color: var(--tempModerate);
+} 
+.severe {
+  background-color: var(--tempSevere);
+}
+.very-high {
+  background-color: var(--tempVeryHigh);
+} 
+
+/* Footer */
+.custom-footer {
+  height: 10vh;
+  font-size: 50px;
+} 
+footer {
+  background: linear-gradient(to left, var(--footerBkgd1), var(--footerBkgd2));
+  bottom: 0;
+  justify-content: center;
+  padding-top: 25px;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+footer a {
+  color: var(--footerText);
+}
+footer a:hover {
+  color: var(--footerHover);
+  font-weight: bold;
+  text-decoration: none;
+}
