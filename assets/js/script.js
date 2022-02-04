@@ -1,8 +1,9 @@
+// Elements and Variables
 let webAPIurl = "https://api.openweathermap.org"
 let webAPIkey = "&appid=17d4b6198b69187e630a6b25bc625c64"
 let ocEndpt = '/data/2.5/onecall?';
 let presetLocations = ['Columbus', 'Dallas', 'Idaho Falls', 'Los Angeles', 'Minneapolis', 'Orlando', 'Phoenix', 'Vancouver'];
-let present = moment().format('YYYY/MM/DD')
+let current = moment().format('YYYY/MM/DD')
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
 let locationTitle;
 const locationhistoryBtn = document.querySelector('#search-buttons')
@@ -20,8 +21,9 @@ const upcomingDate = document.querySelectorAll('.forecast-date');
 const upcomingImg = document.querySelectorAll('.forecast-icon');
 const upcomingTmp = document.querySelectorAll('.forecast-temp');
 const upcomingWnd = document.querySelectorAll('.forecast-wind');
-const upcomingHmd = document.querySelectorAll('.forecast-pressure');
+const upcomingPrs = document.querySelectorAll('.forecast-pressure');
 
+// Obtain Weather Info
 getWeatherInfo = () => {
     let geocodingEndpoint = '/geo/1.0/direct?'
     let apiParam = `q=${locationTitle}`;
@@ -33,11 +35,13 @@ getWeatherInfo = () => {
     .then(function (data) {
         getWeather(data);
     })
+    // Error message if city entered is invalid
     .catch(function (error) {
         alert('Error: enter only the city name');
     })
 }
 
+// Latitude + Longitude
 getWeather = (weatherData) => {
     let lat = weatherData[0].lat;
     let lon = weatherData[0].lon;
@@ -51,6 +55,7 @@ getWeather = (weatherData) => {
         })
 }
 
+// Prime Section info pull
 displayWeather = (coordinatesData, openWeatherData) => {
     primeLocation.textContent = coordinatesData[0].name;
     primeImg.src = `http://openweathermap.org/img/wn/${openWeatherData.current.weather[0].icon}@2x.png`
@@ -78,17 +83,19 @@ displayWeather = (coordinatesData, openWeatherData) => {
     }
 };
 
+// Upcoming Forecast info pull
 displayForecast = (openWeatherData) => {
     for (let i = 0; i < upcomingSection.length; i++) {
         upcomingDate[i].textContent = moment().add((i+1), 'days').format('YYYY/MM/DD');
         upcomingImg[i].src = `http://openweathermap.org/img/wn/${openWeatherData.daily[i].weather[0].icon}@2x.png`;
         upcomingTmp[i].textContent = `${Math.trunc(openWeatherData.daily[i].temp.day)}\xB0F`;
         upcomingWnd[i].textContent = `${openWeatherData.daily[i].wind_speed} mph`;
-        upcomingHmd[i].textContent = `${openWeatherData.daily[i].pressure} mb`;
+        upcomingPrs[i].textContent = `${openWeatherData.daily[i].pressure} mb`;
     }
 };
 
-showSearchHistory = () => {
+// Search Section setup
+displaySearchHistory = () => {
     locationhistoryBtn.textContent = '';
     if (searchHistory === undefined || searchHistory === null) {
         localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
@@ -111,6 +118,7 @@ showSearchHistory = () => {
     }
 };
 
+// Search Button listener
 search.addEventListener('click', function (event) {
     event.preventDefault();
     
@@ -120,9 +128,10 @@ search.addEventListener('click', function (event) {
     searchInput.value = '';
 });
 
+// Fills page with content
 init = () => {
-    primeDate.textContent = ` ${present}`
-    showSearchHistory();
+    primeDate.textContent = ` ${current}`
+    displaySearchHistory();
     getWeatherInfo();
 }
 
