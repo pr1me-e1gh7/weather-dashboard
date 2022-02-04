@@ -1,113 +1,100 @@
-const previousLocationsBtn = document.querySelector('#search-buttons')
+let webAPIurl = "https://api.openweathermap.org"
+let webAPIkey = "&appid=17d4b6198b69187e630a6b25bc625c64"
+let ocEndpt = '/data/2.5/onecall?';
+let presetLocations = ['Columbus', 'Dallas', 'Idaho Falls', 'Los Angeles', 'Minneapolis', 'Orlando', 'Phoenix', 'Vancouver'];
+let present = moment().format('YYYY/MM/DD')
+let searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
+let locationTitle;
+const locationhistoryBtn = document.querySelector('#search-buttons')
 const search = document.querySelector('#city-search-button');
 const searchInput = document.querySelector('#city-search');
-const mainCity = document.querySelector('#main-card-city');
-const mainDate = document.querySelector('#main-card-date');
-const mainIcon = document.querySelector('#main-card-icon');
-const mainTemp = document.querySelector('#main-card-temp');
-const mainWind = document.querySelector('#main-card-wind');
-const mainHumidity = document.querySelector('#main-card-humidity');
-const mainUv = document.querySelector('#main-card-uv');
-const futureCard = document.querySelectorAll('.forecast-card');
-const futureCardDate = document.querySelectorAll('.forecast-date');
-const futureCardIcon = document.querySelectorAll('.forecast-icon');
-const futureCardTemp = document.querySelectorAll('.forecast-temp');
-const futureCardWind = document.querySelectorAll('.forecast-wind');
-const futureCardHumidity = document.querySelectorAll('.forecast-humidity');
-let weatherApiUrl = "https://api.openweathermap.org"
-let weatherApiKey = "&appid=5f57691783cc169eba4c5ecbcd6eb5db"
-let oneCallEndpoint = '/data/2.5/onecall?';
-let defaultSearch = ['New York', 'Chicago', 'Austin', 'San Francisco', 'Seattle', 'Denver', 'Atlanta', 'San Diego'];
-let today = moment().format('YYYY/MM/DD')
-let searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-let cityName;
+const primeLocation = document.querySelector('#prime-card-city');
+const primeDate = document.querySelector('#prime-card-date');
+const primeImg = document.querySelector('#prime-card-icon');
+const primeTmp = document.querySelector('#prime-card-temp');
+const primeWnd = document.querySelector('#prime-card-wind');
+const primeHmd = document.querySelector('#prime-card-humidity');
+const primeUV = document.querySelector('#prime-card-uv');
+const upcomingSection = document.querySelectorAll('.forecast-card');
+const upcomingDate = document.querySelectorAll('.forecast-date');
+const upcomingImg = document.querySelectorAll('.forecast-icon');
+const upcomingTmp = document.querySelectorAll('.forecast-temp');
+const upcomingWnd = document.querySelectorAll('.forecast-wind');
+const upcomingHmd = document.querySelectorAll('.forecast-humidity');
 
-fetchWeatherData = () => {
+getWeatherInfo = () => {
     let geocodingEndpoint = '/geo/1.0/direct?'
-    let apiParam = `q=${cityName}`;
+    let apiParam = `q=${locationTitle}`;
 
-    fetch(`${weatherApiUrl}${geocodingEndpoint}${apiParam}${weatherApiKey}`)
+    fetch(`${webAPIurl}${geocodingEndpoint}${apiParam}${webAPIkey}`)
     .then(function (response) {
         return response.json();
     })
     .then(function (data) {
-        fetchWeather(data);
+        getWeather(data);
     })
     .catch(function (error) {
-        alert('please enter a valid city name');
+        alert('Error: enter only the city name');
     })
 }
 
-fetchWeather = (weatherData) => {
+getWeather = (weatherData) => {
     let lat = weatherData[0].lat;
     let lon = weatherData[0].lon;
-    fetch(`${weatherApiUrl}${oneCallEndpoint}lat=${lat}&lon=${lon}&units=imperial${weatherApiKey}`)
+    fetch(`${webAPIurl}${ocEndpt}lat=${lat}&lon=${lon}&units=imperial${webAPIkey}`)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
-            addToSearchHistory(weatherData);
-            showWeather(weatherData, data);
+            displayWeather(weatherData, data);
             showForecast(data);
         })
 }
 
-showWeather = (coordinatesData, openWeatherData) => {
-    mainCity.textContent = coordinatesData[0].name;
-    mainIcon.src = `http://openweathermap.org/img/wn/${openWeatherData.current.weather[0].icon}@2x.png`
-    mainTemp.textContent = `${Math.trunc(openWeatherData.current.temp)}\xB0F`;
-    mainWind.textContent = `${openWeatherData.current.wind_speed} mph`;
-    mainHumidity.textContent = `${openWeatherData.current.humidity}%`;
-    mainUv.textContent = Math.trunc(openWeatherData.current.uvi);
-    mainUv.parentElement.classList.remove('low');
-    mainUv.parentElement.classList.remove('moderate');
-    mainUv.parentElement.classList.remove('high');
-    mainUv.parentElement.classList.remove('very-high');
-    mainUv.parentElement.classList.remove('severe');
+displayWeather = (coordinatesData, openWeatherData) => {
+    primeLocation.textContent = coordinatesData[0].name;
+    primeImg.src = `http://openweathermap.org/img/wn/${openWeatherData.current.weather[0].icon}@2x.png`
+    primeTmp.textContent = `${Math.trunc(openWeatherData.current.temp)}\xB0F`;
+    primeWnd.textContent = `${openWeatherData.current.wind_speed} mph`;
+    primeHmd.textContent = `${openWeatherData.current.humidity}%`;
+    primeUV.textContent = Math.trunc(openWeatherData.current.uvi);
+    primeUV.parentElement.classList.remove('low');
+    primeUV.parentElement.classList.remove('moderate');
+    primeUV.parentElement.classList.remove('high');
+    primeUV.parentElement.classList.remove('very-high');
+    primeUV.parentElement.classList.remove('severe');
 
-    if (mainUv.textContent <= 2) {
-        mainUv.parentElement.classList.add('low');
-    } else if (mainUv.textContent <= 5) {
-        mainUv.parentElement.classList.add('moderate')
-    } else if (mainUv.textContent <= 7) {
-        mainUv.parentElement.classList.add('high')
+    if (primeUV.textContent <= 2) {
+        primeUV.parentElement.classList.add('low');
+    } else if (primeUV.textContent <= 5) {
+        primeUV.parentElement.classList.add('moderate')
+    } else if (primeUV.textContent <= 7) {
+        primeUV.parentElement.classList.add('high')
     }
-    else if (mainUv.textContent <= 10) {
-        mainUv.parentElement.classList.add('very-high')
+    else if (primeUV.textContent <= 10) {
+        primeUV.parentElement.classList.add('very-high')
     } else {
-        mainUv.parentElement.classList.add('severe');
+        primeUV.parentElement.classList.add('severe');
     }
 };
 
 showForecast = (openWeatherData) => {
-    for (let i = 0; i < futureCard.length; i++) {
-        futureCardDate[i].textContent = moment().add((i+1), 'days').format('YYYY/MM/DD');
-        futureCardIcon[i].src = `http://openweathermap.org/img/wn/${openWeatherData.daily[i].weather[0].icon}@2x.png`;
-        futureCardTemp[i].textContent = `${Math.trunc(openWeatherData.daily[i].temp.day)}\xB0F`;
-        futureCardWind[i].textContent = `${openWeatherData.daily[i].wind_speed} mph`;
-        futureCardHumidity[i].textContent = `${openWeatherData.daily[i].humidity}%`;
+    for (let i = 0; i < upcomingSection.length; i++) {
+        upcomingDate[i].textContent = moment().add((i+1), 'days').format('YYYY/MM/DD');
+        upcomingImg[i].src = `http://openweathermap.org/img/wn/${openWeatherData.daily[i].weather[0].icon}@2x.png`;
+        upcomingTmp[i].textContent = `${Math.trunc(openWeatherData.daily[i].temp.day)}\xB0F`;
+        upcomingWnd[i].textContent = `${openWeatherData.daily[i].wind_speed} mph`;
+        upcomingHmd[i].textContent = `${openWeatherData.daily[i].humidity}%`;
     }
-};
-
-addToSearchHistory = (weatherData) => {
-    let city = weatherData[0].name;
-    let searchArray = JSON.parse(localStorage.getItem('searchHistory'));
-    if (!searchArray.includes(city)) {
-        searchArray.unshift(city);
-        searchArray.pop();
-        localStorage.setItem('searchHistory', JSON.stringify(searchArray));
-        searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-    }
-    showSearchHistory();
 };
 
 showSearchHistory = () => {
-    previousLocationsBtn.textContent = '';
+    locationhistoryBtn.textContent = '';
     if (searchHistory === undefined || searchHistory === null) {
-        localStorage.setItem('searchHistory', JSON.stringify(defaultSearch));
+        localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
     }
     searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-    cityName = searchHistory[0];
+    locationTitle = searchHistory[0];
     for (let i = 0; i < searchHistory.length; i++) {
         let button = document.createElement('button');
         button.textContent = searchHistory[i];
@@ -117,26 +104,26 @@ showSearchHistory = () => {
         button.classList.add('mb-2');
         button.classList.add('searched-cities-btn');
         button.addEventListener('click', function(event) {
-            cityName = event.target.textContent
-            fetchWeatherData();
+            locationTitle = event.target.textContent
+            getWeatherInfo();
         })
-        previousLocationsBtn.appendChild(button);
+        locationhistoryBtn.appendChild(button);
     }
 };
 
 search.addEventListener('click', function (event) {
     event.preventDefault();
     
-    cityName = searchInput.value.toLowerCase().trim();
-    fetchWeatherData();
+    locationTitle = searchInput.value.toLowerCase().trim();
+    getWeatherInfo();
     
     searchInput.value = '';
 });
 
 init = () => {
-    mainDate.textContent = ` ${today}`
+    primeDate.textContent = ` ${present}`
     showSearchHistory();
-    fetchWeatherData();
+    getWeatherInfo();
 }
 
 init();

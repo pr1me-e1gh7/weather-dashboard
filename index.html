@@ -28,7 +28,7 @@
           <div id="search-card" class= "card px-4 py-4">
             <h2><i class="fas fa-city"></i> City Search</h2>
             <form class= "border-bottom mb-2">
-                <input type="text" class="form-control mb-2" id="city-search" placeholder="Type in a city here" autocomplete="off">
+                <input type="text" class="form-control mb-2" id="city-search" placeholder="Type in a city here (no state)" autocomplete="off">
                 <button class="btn btn-primary btn-block mb-2" id="city-search-button"><i class="fas fa-search"></i></button>
             </form>
             <div id="search-buttons"></div>
@@ -37,29 +37,29 @@
         <!-- Current Weather Info -->
         <div id="weatherarea" class="col-12 col-md-12 col-lg-9" style="font-family: 'Bebas Neue', cursive !important;">
           <div class="row p-3 m-1">
-            <div id="main-card" class="card col-12 text-light">
+            <div id="prime-card" class="card col-12 text-light">
               <div class="row">
                 <div class="col-12 col-lg-4 text center p-2">
-                  <h2><span id="main-card-city"></span><span id="main-card-date"></span></h2>
-                  <img id="main-card-icon">
+                  <h2><span id="prime-card-city"></span><span id="prime-card-date"></span></h2>
+                  <img id="prime-card-icon">
                 </div>
                 <div class="col-12 col-lg-8 d-flex align-items-center justify-content-between">
                   <div class="container">
                     <div class="row d-flex justify-content-around">
-                      <div class="main-text col-12 col-lg-2 text-center m-2 p-2">
+                      <div class="prime-text col-12 col-lg-2 text-center m-2 p-2">
                         <p>Temp:</p>
-                        <span id="main-card-temp"></span>
+                        <span id="prime-card-temp"></span>
                       </div>
-                      <div class="main-text col-12 col-lg-2 text-center m-2 p-2">
+                      <div class="prime-text col-12 col-lg-2 text-center m-2 p-2">
                         <p>Humidity:</p>
-                        <span id="main-card-humidity"></span>
+                        <span id="prime-card-humidity"></span>
                       </div>
-                      <div class="main-text col-12 col-lg-2 text-center m-2 p-2">
+                      <div class="prime-text col-12 col-lg-2 text-center m-2 p-2">
                         <p>Wind:</p>
-                        <span id="main-card-wind"></span>
+                        <span id="prime-card-wind"></span>
                       </div>
-                      <div class="main-text col-12 col-lg-2 align-self-center">
-                        <a href="https://www.epa.gov/sunsaftey/uv-index-scale-0" target="_blank"><p>UVI: <span id="main-card-uv"></span></p></a>
+                      <div class="prime-text col-12 col-lg-2 align-self-center">
+                        <a href="https://www.epa.gov/sunsaftey/uv-index-scale-0" target="_blank"><p>UVI: <span id="prime-card-uv"></span></p></a>
                       </div>
                     </div>
                   </div>
