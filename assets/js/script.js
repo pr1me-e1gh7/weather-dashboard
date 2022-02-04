@@ -7,8 +7,8 @@ let current = moment().format('YYYY/MM/DD')
 let searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
 let locationTitle;
 const locationhistoryBtn = document.querySelector('#search-buttons')
-const search = document.querySelector('#city-search-button');
-const searchInput = document.querySelector('#city-search');
+const searchFeature = document.querySelector('#city-search-button');
+const searchData = document.querySelector('#city-search');
 const primeLocation = document.querySelector('#prime-card-city');
 const primeDate = document.querySelector('#prime-card-date');
 const primeImg = document.querySelector('#prime-card-icon');
@@ -23,12 +23,46 @@ const upcomingTmp = document.querySelectorAll('.forecast-temp');
 const upcomingWnd = document.querySelectorAll('.forecast-wind');
 const upcomingPrs = document.querySelectorAll('.forecast-pressure');
 
+// Search Section setup
+displaySearchHistory = () => {
+    locationhistoryBtn.textContent = '';
+    if (searchHistory === undefined || searchHistory === null) {
+        localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
+    }
+    searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
+    locationTitle = searchHistory[0];
+    for (let i = 0; i < searchHistory.length; i++) {
+        let button = document.createElement('button');
+        button.textContent = searchHistory[i];
+        button.classList.add('btn');
+        button.classList.add('btn-secondary');
+        button.classList.add('btn-block');
+        button.classList.add('mb-2');
+        button.classList.add('searched-cities-btn');
+        button.addEventListener('click', function(event) {
+            locationTitle = event.target.textContent
+            getWeatherInfo();
+        })
+        locationhistoryBtn.appendChild(button);
+    }
+};
+
+// Search Button listener
+searchFeature.addEventListener('click', function (event) {
+    event.preventDefault();
+    
+    locationTitle = searchData.value.toLowerCase().trim();
+    getWeatherInfo();
+    
+    searchData.value = '';
+});
+
 // Obtain Weather Info
 getWeatherInfo = () => {
-    let geocodingEndpoint = '/geo/1.0/direct?'
-    let apiParam = `q=${locationTitle}`;
+    let gcEndpt = '/geo/1.0/direct?'
+    let APIparameter = `q=${locationTitle}`;
 
-    fetch(`${webAPIurl}${geocodingEndpoint}${apiParam}${webAPIkey}`)
+    fetch(`${webAPIurl}${gcEndpt}${APIparameter}${webAPIkey}`)
     .then(function (response) {
         return response.json();
     })
@@ -43,9 +77,9 @@ getWeatherInfo = () => {
 
 // Latitude + Longitude
 getWeather = (weatherData) => {
-    let lat = weatherData[0].lat;
-    let lon = weatherData[0].lon;
-    fetch(`${webAPIurl}${ocEndpt}lat=${lat}&lon=${lon}&units=imperial${webAPIkey}`)
+    let latitude = weatherData[0].lat;
+    let longitude = weatherData[0].lon;
+    fetch(`${webAPIurl}${ocEndpt}lat=${latitude}&lon=${longitude}&units=imperial${webAPIkey}`)
         .then(function (response) {
             return response.json();
         })
@@ -93,40 +127,6 @@ displayForecast = (openWeatherData) => {
         upcomingPrs[i].textContent = `${openWeatherData.daily[i].pressure} mb`;
     }
 };
-
-// Search Section setup
-displaySearchHistory = () => {
-    locationhistoryBtn.textContent = '';
-    if (searchHistory === undefined || searchHistory === null) {
-        localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
-    }
-    searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
-    locationTitle = searchHistory[0];
-    for (let i = 0; i < searchHistory.length; i++) {
-        let button = document.createElement('button');
-        button.textContent = searchHistory[i];
-        button.classList.add('btn');
-        button.classList.add('btn-secondary');
-        button.classList.add('btn-block');
-        button.classList.add('mb-2');
-        button.classList.add('searched-cities-btn');
-        button.addEventListener('click', function(event) {
-            locationTitle = event.target.textContent
-            getWeatherInfo();
-        })
-        locationhistoryBtn.appendChild(button);
-    }
-};
-
-// Search Button listener
-search.addEventListener('click', function (event) {
-    event.preventDefault();
-    
-    locationTitle = searchInput.value.toLowerCase().trim();
-    getWeatherInfo();
-    
-    searchInput.value = '';
-});
 
 // Fills page with content
 init = () => {
