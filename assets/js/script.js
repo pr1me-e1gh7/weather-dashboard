@@ -90,6 +90,9 @@ displayForecast = (openWeatherData) => {
 
 showSearchHistory = () => {
     locationhistoryBtn.textContent = '';
+    if (searchHistory === undefined || searchHistory === null) {
+        localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
+    }
     searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
     locationTitle = searchHistory[0];
     for (let i = 0; i < searchHistory.length; i++) {
