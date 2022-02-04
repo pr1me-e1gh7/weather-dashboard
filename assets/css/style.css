@@ -61,7 +61,7 @@ body {
   text-align: center;
   font-size: 150%;
 } 
-.forecast-humidity,
+.forecast-pressure,
 .forecast-temp,
 .forecast-wind {
   margin-left: 15px;

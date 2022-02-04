@@ -13,14 +13,14 @@ const primeDate = document.querySelector('#prime-card-date');
 const primeImg = document.querySelector('#prime-card-icon');
 const primeTmp = document.querySelector('#prime-card-temp');
 const primeWnd = document.querySelector('#prime-card-wind');
-const primeHmd = document.querySelector('#prime-card-humidity');
+const primeHmd = document.querySelector('#prime-card-pressure');
 const primeUV = document.querySelector('#prime-card-uv');
 const upcomingSection = document.querySelectorAll('.forecast-card');
 const upcomingDate = document.querySelectorAll('.forecast-date');
 const upcomingImg = document.querySelectorAll('.forecast-icon');
 const upcomingTmp = document.querySelectorAll('.forecast-temp');
 const upcomingWnd = document.querySelectorAll('.forecast-wind');
-const upcomingHmd = document.querySelectorAll('.forecast-humidity');
+const upcomingHmd = document.querySelectorAll('.forecast-pressure');
 
 getWeatherInfo = () => {
     let geocodingEndpoint = '/geo/1.0/direct?'
@@ -47,7 +47,7 @@ getWeather = (weatherData) => {
         })
         .then(function (data) {
             displayWeather(weatherData, data);
-            showForecast(data);
+            displayForecast(data);
         })
 }
 
@@ -56,7 +56,7 @@ displayWeather = (coordinatesData, openWeatherData) => {
     primeImg.src = `http://openweathermap.org/img/wn/${openWeatherData.current.weather[0].icon}@2x.png`
     primeTmp.textContent = `${Math.trunc(openWeatherData.current.temp)}\xB0F`;
     primeWnd.textContent = `${openWeatherData.current.wind_speed} mph`;
-    primeHmd.textContent = `${openWeatherData.current.humidity}%`;
+    primeHmd.textContent = `${openWeatherData.current.pressure} mb`;
     primeUV.textContent = Math.trunc(openWeatherData.current.uvi);
     primeUV.parentElement.classList.remove('low');
     primeUV.parentElement.classList.remove('moderate');
@@ -78,21 +78,18 @@ displayWeather = (coordinatesData, openWeatherData) => {
     }
 };
 
-showForecast = (openWeatherData) => {
+displayForecast = (openWeatherData) => {
     for (let i = 0; i < upcomingSection.length; i++) {
         upcomingDate[i].textContent = moment().add((i+1), 'days').format('YYYY/MM/DD');
         upcomingImg[i].src = `http://openweathermap.org/img/wn/${openWeatherData.daily[i].weather[0].icon}@2x.png`;
         upcomingTmp[i].textContent = `${Math.trunc(openWeatherData.daily[i].temp.day)}\xB0F`;
         upcomingWnd[i].textContent = `${openWeatherData.daily[i].wind_speed} mph`;
-        upcomingHmd[i].textContent = `${openWeatherData.daily[i].humidity}%`;
+        upcomingHmd[i].textContent = `${openWeatherData.daily[i].pressure} mb`;
     }
 };
 
 showSearchHistory = () => {
     locationhistoryBtn.textContent = '';
-    if (searchHistory === undefined || searchHistory === null) {
-        localStorage.setItem('searchHistory', JSON.stringify(presetLocations));
-    }
     searchHistory = JSON.parse(localStorage.getItem('searchHistory'));
     locationTitle = searchHistory[0];
     for (let i = 0; i < searchHistory.length; i++) {
